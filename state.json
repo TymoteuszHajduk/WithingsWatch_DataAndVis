@@ -1,0 +1,7 @@
+{"has_initialised": 1,
+  "userid": "YOUR_USER_ID",
+  "lastupdate": "FIRST_MEASUREMENT_AS_UNIX(int)",
+  "access_token": "YOUR_ACCESS_TOKEN",
+  "refresh_token": "YOUR_REFRESH_TOKEN",
+  "client_id": "YOUR_CLIENT_ID",
+  "client_secret": "YOUR_CLIENT_SECRET"}

@@ -1,0 +1,27 @@
+CHART 1:
+result_list.append((date, start,end, total_sleep_time, lightsleepduration, remsleepduration, deepsleepduration, sleep_score, waso))
+you are given a pandas dataframe with those columns. you have to pivot it into long. make a floating bar chart using altair.
+end corresponds to wakeup, i want it to be on top, start to faliing asleep. i want segments based on shares.shares are self explanatory - deep, rem and light.
+end and start are unix timestamps, so you have to modulo by 86400 and divide by 3600 to get something that makes sense. keep the colors bleak and scientific.
+bonus points if tooltip displays date ('date' is stored as unix too)
+prompt 2 (improvement):
+okay. modifications - you are gonna need a custom x axis, with values looping(1 comes after 24).
+here is a snippet of the database: 34440,16740,4860,12840. largest value is duration, you can use that to determine if WASO is needed
+
+
+CHART 2:
+write altair code for an area chart. x axis is hours stored as numbers of seconds from midnight..
+
+it represents intensity of a phenomenon over the day. i want it really classy.
+make it a function that accepts a dataframe, columns are 'timestamp' and 'value'. i want the tooltip to only display the value as'Steps: {value}'
+
+CHART 3:
+write logic for an altair chart that takes a dataframe with two columns: one is 'date' stored as a unix timestamp corresponding to 0:0 hour
+, the second is a bool value 'status'.
+i need a calendar - sort of layout that will display white boxes for falses and red boxes for trues, but its only 7 days, starting monday.
+dark bleak scientific blues, classy look
+a thin frame. labels '{day of the week}/next day of the week}' labels, as the data represents nights
+
+CHART 4:
+Write logic for an altair line chart that takes a dataframe with two columns: 'date' stored as unix timestamp, 'mean' as the value.
+3 boxes, deep green associated with vitality for values sub 55, lighter green 55-80, rotten brownish yellow above. limit y axis 40-120

@@ -1,0 +1,7 @@
+﻿.idea/
+*.iml
+__pycache__/
+*.pyc
+Streamlit/__pycache__/
+*.db
+
