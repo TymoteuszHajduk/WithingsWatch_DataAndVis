@@ -1,4 +1,4 @@
-{"has_initialised": 1,
+{"has_initialised": 0,
   "userid": "YOUR_USER_ID",
   "lastupdate": "FIRST_MEASUREMENT_AS_UNIX(int)",
   "access_token": "YOUR_ACCESS_TOKEN",
