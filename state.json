@@ -1,1 +1,7 @@
-{"has_initialised": 1, "userid": "45835791", "lastupdate": 1770768000, "access_token": "ee70872eab92a68a64fbe93985e4421ffcd204c2", "refresh_token": "d2630888ec8c06374542a287b32ac1177a0f09ad", "client_id": "9237232e651fb04b7967e3f3c91cb9b248a17bf7735a9d6bdfb8101f11df2f85", "client_secret": "073f76459259354e9ff75f860eb230e88d15bb017ed96c2769aa627fcd72b74d"}
+{"has_initialised": 0,
+  "userid": "YOUR_USER_ID",
+  "lastupdate": "FIRST_MEASUREMENT_AS_UNIX(int)",
+  "access_token": "YOUR_ACCESS_TOKEN",
+  "refresh_token": "YOUR_REFRESH_TOKEN",
+  "client_id": "YOUR_CLIENT_ID",
+  "client_secret": "YOUR_CLIENT_SECRET"}
