@@ -4,4 +4,4 @@ __pycache__/
 *.pyc
 Streamlit/__pycache__/
 *.db
-
+state.json

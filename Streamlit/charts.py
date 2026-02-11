@@ -2,8 +2,9 @@ import altair as alt
 import pandas as pd
 from datetime import  timedelta
 
+
 def sleep_chart(df_sleep_chart):
-    #CHART 1
+    # CHART 1
     df_sleep_chart['stages_sum'] = df_sleep_chart['lightsleepduration'] + df_sleep_chart['remsleepduration'] + df_sleep_chart['deepsleepduration']
     # If Total > Sum, the remainder is WASO.
     df_sleep_chart['calc_waso'] = df_sleep_chart['total_sleep_time'] - df_sleep_chart['stages_sum']
@@ -12,6 +13,13 @@ def sleep_chart(df_sleep_chart):
     # B. Time Handling (The "Looping" Logic)
     # Convert Date to string for X-axis
     df_sleep_chart['date_str'] = pd.to_datetime(df_sleep_chart['date'], unit='s').dt.strftime('%Y-%m-%d')
+
+    # --- NEW LOGIC: Generate a complete timeline of dates ---
+    # We find the earliest and latest dates in the db, and create a list of all days in between.
+    min_date = pd.to_datetime(df_sleep_chart['date'].min(), unit='s')
+    max_date = pd.to_datetime(df_sleep_chart['date'].max(), unit='s')
+    all_dates = pd.date_range(start=min_date, end=max_date, freq='D').strftime('%Y-%m-%d').tolist()
+    # --------------------------------------------------------
 
     # Get Start Hour (0-24)
     df_sleep_chart['start_h'] = (df_sleep_chart['start'] % 86400) / 3600
@@ -50,11 +58,12 @@ def sleep_chart(df_sleep_chart):
     # Define Order: Deep -> REM -> Light -> Awake (Bottom to Top)
     stage_order = ['Deep', 'REM', 'Light', 'Awake']
     df_long['Stage'] = pd.Categorical(df_long['Stage'], categories=stage_order, ordered=True)
-    df_long = df_long.sort_values(['date_str', 'Stage'])
 
+    df_long = df_long.sort_values(['date_str', 'start_plot', 'Stage'])
 
-    df_long['cum_dur'] = df_long.groupby('date_str')['duration_h'].cumsum()
-    df_long['prev_cum_dur'] = df_long.groupby('date_str')['duration_h'].shift(1).fillna(0)
+    # 2. Group by both the date and the specific session start time
+    df_long['cum_dur'] = df_long.groupby(['date_str', 'start_plot'])['duration_h'].cumsum()
+    df_long['prev_cum_dur'] = df_long.groupby(['date_str', 'start_plot'])['duration_h'].shift(1).fillna(0)
 
     df_long['y_bottom'] = df_long['start_plot'] + df_long['prev_cum_dur']
     df_long['y_top'] = df_long['start_plot'] + df_long['cum_dur']
@@ -67,7 +76,12 @@ def sleep_chart(df_sleep_chart):
     )
 
     chart = alt.Chart(df_long).mark_bar(width=40).encode(
-        x=alt.X('date_str:N', title='Date', axis=alt.Axis(labelAngle=0)),
+        # --- NEW LOGIC: Pass the complete list of dates to the domain ---
+        x=alt.X('date_str:N',
+                title='Date',
+                scale=alt.Scale(domain=all_dates),  # This forces empty days to render
+                axis=alt.Axis(labelAngle=0)),
+        # ----------------------------------------------------------------
 
         # Y-Axis: We use the continuous values (22, 23, 24, 25...)
         # But we us 'labelExpr' to modulo them by 24 for the display labels
@@ -95,7 +109,6 @@ def sleep_chart(df_sleep_chart):
     return chart
 
 
-
 def create_fixed_axis_area_chart(df):
     #CHART 2
     primary_color = "#325d88"
@@ -111,10 +124,11 @@ def create_fixed_axis_area_chart(df):
     )
 
     # 2. Calculate Dynamic Axis Values
-    print(df)
+
     # Y-AXIS: 1000-step intervals
     max_val = df['value'].max()
-    y_ticks = list(range(0, int(max_val) + 2000, 1000))
+
+    y_ticks = list(range(0, int(max_val), 1000))
 
     # X-AXIS: Strictly every 4 hours
     # We find the start and end of your data to generate the correct ticks
